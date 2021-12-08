@@ -2,6 +2,7 @@ let x = [0];
 let y = [0];
 let z = [0];
 
+
 let labels = [0];
 console.log("hi");
 
@@ -56,16 +57,58 @@ var chart1 = new Chart(ctx, {
   }
 });
 
+
 let socket = io.connect("http://3.130.18.167:9000");
+
+
+let threshold = 0;
+const err = document.getElementById("error");
+const statuss = document.getElementById("status");
+
+const thresh_btn = document.getElementById("thresh-btn");
+thresh_btn.addEventListener("click", () => {
+  t = document.getElementById("threshold");
+  threshold = t;
+})
+
+
+function checkEarthQuake(x){
+windows = 15;
+
+num_points_thresh = 10; // number of points needed to cross threshold
+// At position 2, remove 2 items: 
+index = 0;
+  while(index <= x.length){
+      let check = x.slice(index, index + windows);
+      let count = 0
+      for(let i = 0 ; i < check.length ; i++){
+          if(check[i] > threshold)
+              count = count + 1;
+      }
+      if(count > num_points_thresh){
+        statuss.innerText = "EarthQuake detected!"
+          console.log("Earthquake")
+      }
+      console.log(check)
+      index += windows
+  }
+}
 
 socket.on("goa", (data) => {
   console.log(data);
-  if(labels.length > 100){
+  if(labels.length > 150){
     labels.shift();
     x.shift();
     y.shift();
     z.shift();
+    checkEarthQuake(x);
+    checkEarthQuake(y);
   }
+if(data.z < data.x || data.z < data.y)
+  err.innerText = "Check sensor configuration"
+else
+err.innerText = ""
+
   x.push(data.x);
   y.push(data.y);
   z.push(data.z);
