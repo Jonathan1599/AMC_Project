@@ -102,7 +102,7 @@ function detectEarthQuake(x){
       count = count + 1;
   });
 
-  if(count > 20){
+  if(count > 10){
     statuss.innerText = "EarthQuake detected!"
     console.log("Earthquake")
   }
@@ -110,6 +110,7 @@ function detectEarthQuake(x){
   else{
     statuss.innerText = ""
     console.log("no Earthquake")
+    console.log(count)
   }
 
 }
