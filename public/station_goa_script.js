@@ -1,6 +1,6 @@
-let x = [];
-let y = [];
-let z = [];
+let x = [0];
+let y = [0];
+let z = [0];
 
 let labels = [0];
 console.log("hi");
@@ -30,28 +30,47 @@ var chart1 = new Chart(ctx, {
     ],
   },
 
-  options: {
+  options:  {
     scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-    },
-  },
+      yAxes: [{
+        display: true,
+        ticks: {
+          beginAtZero:true,
+          min: -15,
+          max: 15 
+        }
+      }]
+    }
+   // animation,
+    // interaction: {
+    //   intersect: false
+    // },
+    // plugins: {
+    //   legend: false
+    // },
+    // scales: {
+    //   x: {
+    //     type: 'linear'
+    //   }
+    // }
+  }
 });
 
-let socket = io.connect("http://localhost:9000");
+let socket = io.connect("http://3.130.18.167:9000");
 
 socket.on("goa", (data) => {
   console.log(data);
+  if(labels.length > 100){
+    labels.shift();
+    x.shift();
+    y.shift();
+    z.shift();
+  }
   x.push(data.x);
   y.push(data.y);
   z.push(data.z);
   labels.push(labels[labels.length - 1] + 1);
-  chart1.update();
+  chart1.update(); 
 });
 
 // const ctx = document.getElementById('myChart');

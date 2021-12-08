@@ -2,47 +2,53 @@ let x = [];
 let y = [];
 let z = [];
 
+let labels = [0];
 console.log("hi");
-let  socket = io.connect('http://localhost:9000');
 
-socket.on('patna', ( data ) => {
-   console.log(data);
-   x.push(data.x);
-   y.push(data.y);
-   z.push(data.z);
-   //chart1.update();
-})
-
-var ctx = document.getElementById('myChart').getContext('2d');
-
+var ctx = document.getElementById("myChart").getContext("2d");
 
 var chart1 = new Chart(ctx, {
-// The type of chart we want to create
-type: 'line',
+  // The type of chart we want to create
+  type: "line",
 
-// The data for our dataset
-data: {
-  labels: time,
-  datasets: [{
-      label: 'My First dataset',
-      //backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [1,2,3,4]
-  }]
-},
+  // The data for our dataset
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: "X",
+        //backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: "rgb(255, 99, 132)",
+        data: x,
+      },
+      {
+        label: "Y",
+        //backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: "rgb(0, 99, 132)",
+        data: y,   
+      },
+    ],
+  },
 
-
-options: {
-scales: {
-    yAxes: [{
-        ticks: {
-            beginAtZero: true
-        }
-    }]
-}
-}
+ 
 });
 
+let socket = io.connect("http://3.130.18.167:9000");
+
+socket.on("patna", (data) => {
+  console.log(data);
+  if(labels.length > 100){
+    labels.shift();
+    x.shift();
+    y.shift();
+    z.shift();
+  }
+  x.push(data.x);
+  y.push(data.y);
+  z.push(data.z);
+  labels.push(labels[labels.length - 1] + 1);
+  chart1.update();
+});
 
 // const ctx = document.getElementById('myChart');
 // const myChart = new Chart(ctx, {
@@ -56,7 +62,7 @@ scales: {
 //                 'rgba(255, 99, 132, 0.2)',
 //                 'rgba(54, 162, 235, 0.2)',
 //                 'rgba(255, 206, 86, 0.2)',
-               
+
 //             ],
 //             borderColor: [
 //                 'rgba(255, 99, 132, 1)',

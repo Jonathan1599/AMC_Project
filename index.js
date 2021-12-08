@@ -15,7 +15,7 @@ app.use(express.static("public"));
 const expressWs = expressws(app);
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin : "*"}));
 app.options("*", cors());
 
 app.get("/", (req, res, next) => {
