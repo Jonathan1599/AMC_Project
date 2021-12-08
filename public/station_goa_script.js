@@ -75,7 +75,7 @@ thresh_btn.addEventListener("click", () => {
 function checkEarthQuake(x){
 windows = 15;
 
-num_points_thresh = 10; // number of points needed to cross threshold
+num_points_thresh = 3; // number of points needed to cross threshold
 // At position 2, remove 2 items: 
 index = 0;
   while(index <= x.length){
@@ -94,6 +94,25 @@ index = 0;
   }
 }
 
+function detectEarthQuake(x){
+  count = 0;
+  x.forEach(element => {
+    if(element > threshold)
+      count = count + 1;
+  });
+
+  if(count > 20){
+    statuss.innerText = "EarthQuake detected!"
+    console.log("Earthquake")
+  }
+
+  else{
+    statuss.innerText = ""
+    console.log("no Earthquake")
+  }
+
+}
+
 socket.on("goa", (data) => {
   console.log(data);
   if(labels.length > 150){
@@ -101,8 +120,8 @@ socket.on("goa", (data) => {
     x.shift();
     y.shift();
     z.shift();
-    checkEarthQuake(x);
-    checkEarthQuake(y);
+    detectEarthQuake(x);
+    detectEarthQuake(y);
   }
 if(data.z < data.x || data.z < data.y)
   err.innerText = "Check sensor configuration"
