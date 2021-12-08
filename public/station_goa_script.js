@@ -67,7 +67,8 @@ const statuss = document.getElementById("status");
 
 const thresh_btn = document.getElementById("thresh-btn");
 thresh_btn.addEventListener("click", () => {
-  t = document.getElementById("threshold");
+  t = document.getElementById("threshold").value;
+  console.log(t);
   threshold = t;
 })
 
